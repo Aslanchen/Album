@@ -1,4 +1,10 @@
 ext {
+    VERSIONCODE = 1
+    VERSIONNAME = "2.1.3-SNAPSHOT"
+
+    GROUPID = 'com.yanzhenjie'
+    ARTIFACTID = 'album'
+
     plugins = [
             library    : 'com.android.library',
             application: 'com.android.application',

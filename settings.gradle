@@ -25,5 +25,5 @@ dependencyResolutionManagement {
     }
 }
 
-include ':sample'
+//include ':sample'
 include ':album'

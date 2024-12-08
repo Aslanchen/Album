@@ -1,4 +1,7 @@
-apply plugin: rootProject.ext.plugins.library
+plugins {
+    id 'com.android.library'
+    id 'maven-publish'
+}
 
 android {
     namespace "com.yanzhenjie.album"
@@ -10,6 +13,13 @@ android {
     }
 
     resourcePrefix 'album'
+
+    publishing {
+        singleVariant('release') {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
 }
 
 dependencies {
@@ -20,4 +30,41 @@ dependencies {
     api rootProject.ext.dependencies.mediaScanner
 }
 
+apply plugin: 'maven-publish'
+afterEvaluate {
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                from components.release
+                groupId = rootProject.ext.GROUPID
+                artifactId = rootProject.ext.ARTIFACTID
+                version = rootProject.ext.VERSIONNAME
+            }
+
+            aliyun(MavenPublication) {
+                from components.release
+                groupId = rootProject.ext.GROUPID
+                artifactId = rootProject.ext.ARTIFACTID
+                version = rootProject.ext.VERSIONNAME
+            }
+        }
+
+        repositories {
+            maven {
+                url = 'https://packages.aliyun.com/maven/repository/2431942-release-hscuua/'
+                credentials {
+                    username = aliyun_maven_username
+                    password = aliyun_maven_password
+                }
+            }
+            maven {
+                url = 'https://packages.aliyun.com/maven/repository/2431942-snapshot-vvk1B7/'
+                credentials {
+                    username = aliyun_maven_username
+                    password = aliyun_maven_password
+                }
+            }
+        }
+    }
+}
 //apply from: 'https://raw.githubusercontent.com/yanzhenjie/bintray/master/maven.gradle'

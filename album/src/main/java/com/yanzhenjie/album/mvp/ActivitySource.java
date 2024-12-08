@@ -15,6 +15,7 @@
  */
 package com.yanzhenjie.album.mvp;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
