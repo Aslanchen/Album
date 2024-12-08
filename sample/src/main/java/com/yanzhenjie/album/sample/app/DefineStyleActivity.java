@@ -163,14 +163,14 @@ public class DefineStyleActivity extends AppCompatActivity {
                 finish();
                 break;
             }
-            case R.id.menu_eye: {
-                previewAlbum(0);
-                break;
-            }
-            case R.id.menu_album: {
-                selectAlbum();
-                break;
-            }
+//            case R.id.menu_eye: {
+//                previewAlbum(0);
+//                break;
+//            }
+//            case R.id.menu_album: {
+//                selectAlbum();
+//                break;
+//            }
         }
         return true;
     }

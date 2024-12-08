@@ -147,14 +147,14 @@ public class ImageActivity extends AppCompatActivity {
                 finish();
                 break;
             }
-            case R.id.menu_eye: {
-                previewImage(0);
-                break;
-            }
-            case R.id.menu_select_image: {
-                selectImage();
-                break;
-            }
+//            case R.id.menu_eye: {
+//                previewImage(0);
+//                break;
+//            }
+//            case R.id.menu_select_image: {
+//                selectImage();
+//                break;
+//            }
         }
         return true;
     }

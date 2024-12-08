@@ -162,32 +162,32 @@ public class AlbumFilterActivity extends AppCompatActivity {
                 finish();
                 break;
             }
-            case R.id.menu_eye: {
-                previewAlbum(0);
-                break;
-            }
-            case R.id.menu_album: {
-                new AlertDialog.Builder(this)
-                        .setCancelable(false)
-                        .setTitle(R.string.app_name)
-                        .setMessage(R.string.hint_filter_after_visibility)
-                        .setNeutralButton(R.string.filter_after_visibility_gone, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mAfterFilterVisibility = false;
-                                selectAlbum();
-                            }
-                        })
-                        .setPositiveButton(R.string.filter_after_visibility_visible, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mAfterFilterVisibility = true;
-                                selectAlbum();
-                            }
-                        })
-                        .show();
-                break;
-            }
+//            case R.id.menu_eye: {
+//                previewAlbum(0);
+//                break;
+//            }
+//            case R.id.menu_album: {
+//                new AlertDialog.Builder(this)
+//                        .setCancelable(false)
+//                        .setTitle(R.string.app_name)
+//                        .setMessage(R.string.hint_filter_after_visibility)
+//                        .setNeutralButton(R.string.filter_after_visibility_gone, new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                mAfterFilterVisibility = false;
+//                                selectAlbum();
+//                            }
+//                        })
+//                        .setPositiveButton(R.string.filter_after_visibility_visible, new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                mAfterFilterVisibility = true;
+//                                selectAlbum();
+//                            }
+//                        })
+//                        .show();
+//                break;
+//            }
         }
         return true;
     }

@@ -1,8 +1,8 @@
 apply plugin: rootProject.ext.plugins.library
 
 android {
-    compileSdkVersion rootProject.ext.android.compileSdkVersion
-    buildToolsVersion rootProject.ext.android.buildToolsVersion
+    namespace "com.yanzhenjie.album"
+    compileSdk rootProject.ext.android.compileSdkVersion
 
     defaultConfig {
         minSdkVersion rootProject.ext.android.minSdkVersion
@@ -20,4 +20,4 @@ dependencies {
     api rootProject.ext.dependencies.mediaScanner
 }
 
-apply from: 'https://raw.githubusercontent.com/yanzhenjie/bintray/master/maven.gradle'
+//apply from: 'https://raw.githubusercontent.com/yanzhenjie/bintray/master/maven.gradle'

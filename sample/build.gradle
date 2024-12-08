@@ -1,8 +1,8 @@
 apply plugin: rootProject.ext.plugins.application
 
 android {
-    compileSdkVersion rootProject.ext.android.compileSdkVersion
-    buildToolsVersion rootProject.ext.android.buildToolsVersion
+    namespace "com.yanzhenjie.album.sample"
+    compileSdk rootProject.ext.android.compileSdkVersion
 
     defaultConfig {
         applicationId rootProject.ext.android.applicationId

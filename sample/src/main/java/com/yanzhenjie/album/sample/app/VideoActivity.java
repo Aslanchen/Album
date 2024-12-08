@@ -147,14 +147,14 @@ public class VideoActivity extends AppCompatActivity {
                 finish();
                 break;
             }
-            case R.id.menu_eye: {
-                previewVideo(0);
-                break;
-            }
-            case R.id.menu_select_video: {
-                selectVideo();
-                break;
-            }
+//            case R.id.menu_eye: {
+//                previewVideo(0);
+//                break;
+//            }
+//            case R.id.menu_select_video: {
+//                selectVideo();
+//                break;
+//            }
         }
         return true;
     }

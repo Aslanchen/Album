@@ -60,34 +60,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
-            case R.id.btn_camera: {
-                startActivity(new Intent(this, CameraActivity.class));
-                break;
-            }
-            case R.id.btn_image: {
-                startActivity(new Intent(this, ImageActivity.class));
-                break;
-            }
-            case R.id.btn_video: {
-                startActivity(new Intent(this, VideoActivity.class));
-                break;
-            }
-            case R.id.btn_album: {
-                startActivity(new Intent(this, AlbumActivity.class));
-                break;
-            }
-            case R.id.btn_gallery: {
-                startActivity(new Intent(this, GalleryActivity.class));
-                break;
-            }
-            case R.id.btn_chang_ui: {
-                startActivity(new Intent(this, DefineStyleActivity.class));
-                break;
-            }
-            case R.id.btn_filter: {
-                startActivity(new Intent(this, AlbumFilterActivity.class));
-                break;
-            }
+//            case R.id.btn_camera: {
+//                startActivity(new Intent(this, CameraActivity.class));
+//                break;
+//            }
+//            case R.id.btn_image: {
+//                startActivity(new Intent(this, ImageActivity.class));
+//                break;
+//            }
+//            case R.id.btn_video: {
+//                startActivity(new Intent(this, VideoActivity.class));
+//                break;
+//            }
+//            case R.id.btn_album: {
+//                startActivity(new Intent(this, AlbumActivity.class));
+//                break;
+//            }
+//            case R.id.btn_gallery: {
+//                startActivity(new Intent(this, GalleryActivity.class));
+//                break;
+//            }
+//            case R.id.btn_chang_ui: {
+//                startActivity(new Intent(this, DefineStyleActivity.class));
+//                break;
+//            }
+//            case R.id.btn_filter: {
+//                startActivity(new Intent(this, AlbumFilterActivity.class));
+//                break;
+//            }
         }
     }
 }

@@ -24,10 +24,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.PermissionChecker;
 import android.support.v7.app.AppCompatActivity;
-
 import com.yanzhenjie.album.Album;
 import com.yanzhenjie.album.util.AlbumUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -37,66 +35,97 @@ import java.util.Locale;
  */
 public class BaseActivity extends AppCompatActivity implements Bye {
 
-    public static final String[] PERMISSION_TAKE_PICTURE = {"android.permission.CAMERA", "android.permission.READ_EXTERNAL_STORAGE", "android.permission.WRITE_EXTERNAL_STORAGE"};
-    public static final String[] PERMISSION_TAKE_VIDEO = {"android.permission.CAMERA", "android.permission.RECORD_AUDIO", "android.permission.READ_EXTERNAL_STORAGE", "android.permission.WRITE_EXTERNAL_STORAGE"};
-    public static final String[] PERMISSION_STORAGE = {"android.permission.READ_EXTERNAL_STORAGE", "android.permission.WRITE_EXTERNAL_STORAGE"};
+  public static final String[] PERMISSION_TAKE_PICTURE = {
+      android.Manifest.permission.CAMERA,
+      android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+      android.Manifest.permission.READ_EXTERNAL_STORAGE
+  };
+  public static final String[] PERMISSION_TAKE_PICTURE_33 = {
+      android.Manifest.permission.CAMERA,
+      android.Manifest.permission.READ_MEDIA_IMAGES
+  };
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Locale locale = Album.getAlbumConfig().getLocale();
-        AlbumUtils.applyLanguageForContext(this, locale);
-    }
+  public static final String[] PERMISSION_TAKE_VIDEO = {
+      android.Manifest.permission.CAMERA, android.Manifest.permission.RECORD_AUDIO,
+      android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+      android.Manifest.permission.READ_EXTERNAL_STORAGE
+  };
+  public static final String[] PERMISSION_TAKE_VIDEO_33 = {
+      android.Manifest.permission.CAMERA, android.Manifest.permission.RECORD_AUDIO,
+      android.Manifest.permission.READ_MEDIA_IMAGES,
+      android.Manifest.permission.READ_MEDIA_VIDEO,
+  };
 
-    /**
-     * Request permission.
-     */
-    protected void requestPermission(String[] permissions, int code) {
-        if (Build.VERSION.SDK_INT >= 23) {
-            List<String> deniedPermissions = getDeniedPermissions(this, permissions);
-            if (deniedPermissions.isEmpty()) {
-                onPermissionGranted(code);
-            } else {
-                permissions = new String[deniedPermissions.size()];
-                deniedPermissions.toArray(permissions);
-                ActivityCompat.requestPermissions(this, permissions, code);
-            }
-        } else {
-            onPermissionGranted(code);
-        }
-    }
+  public static final String[] PERMISSION_STORAGE = {
+      android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+      android.Manifest.permission.READ_EXTERNAL_STORAGE
+  };
+  public static final String[] PERMISSION_STORAGE_33 = {
+      android.Manifest.permission.READ_MEDIA_IMAGES,
+      android.Manifest.permission.READ_MEDIA_VIDEO,
+  };
 
-    @Override
-    public final void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (isGrantedResult(grantResults)) onPermissionGranted(requestCode);
-        else onPermissionDenied(requestCode);
-    }
+  @Override
+  protected void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    Locale locale = Album.getAlbumConfig().getLocale();
+    AlbumUtils.applyLanguageForContext(this, locale);
+  }
 
-    protected void onPermissionGranted(int code) {
+  /**
+   * Request permission.
+   */
+  protected void requestPermission(String[] permissions, int code) {
+    if (Build.VERSION.SDK_INT >= 23) {
+      List<String> deniedPermissions = getDeniedPermissions(this, permissions);
+      if (deniedPermissions.isEmpty()) {
+        onPermissionGranted(code);
+      } else {
+        permissions = new String[deniedPermissions.size()];
+        deniedPermissions.toArray(permissions);
+        ActivityCompat.requestPermissions(this, permissions, code);
+      }
+    } else {
+      onPermissionGranted(code);
     }
+  }
 
-    protected void onPermissionDenied(int code) {
+  @Override
+  public final void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    if (isGrantedResult(grantResults)) {
+      onPermissionGranted(requestCode);
+    } else {
+      onPermissionDenied(requestCode);
     }
+  }
 
-    @Override
-    public void bye() {
-        onBackPressed();
-    }
+  protected void onPermissionGranted(int code) {
+  }
 
-    private static List<String> getDeniedPermissions(Context context, String... permissions) {
-        List<String> deniedList = new ArrayList<>(2);
-        for (String permission : permissions) {
-            if (PermissionChecker.checkSelfPermission(context, permission) != PermissionChecker.PERMISSION_GRANTED) {
-                deniedList.add(permission);
-            }
-        }
-        return deniedList;
-    }
+  protected void onPermissionDenied(int code) {
+  }
 
-    private static boolean isGrantedResult(int... grantResults) {
-        for (int result : grantResults) {
-            if (result == PackageManager.PERMISSION_DENIED) return false;
-        }
-        return true;
+  @Override
+  public void bye() {
+    onBackPressed();
+  }
+
+  private static List<String> getDeniedPermissions(Context context, String... permissions) {
+    List<String> deniedList = new ArrayList<>(2);
+    for (String permission : permissions) {
+      if (PermissionChecker.checkSelfPermission(context, permission) != PermissionChecker.PERMISSION_GRANTED) {
+        deniedList.add(permission);
+      }
     }
+    return deniedList;
+  }
+
+  private static boolean isGrantedResult(int... grantResults) {
+    for (int result : grantResults) {
+      if (result == PackageManager.PERMISSION_DENIED) {
+        return false;
+      }
+    }
+    return true;
+  }
 }

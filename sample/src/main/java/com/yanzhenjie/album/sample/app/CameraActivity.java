@@ -116,14 +116,14 @@ public class CameraActivity extends AppCompatActivity {
                 finish();
                 break;
             }
-            case R.id.menu_image_capture: {
-                takePicture();
-                break;
-            }
-            case R.id.menu_video_capture: {
-                recordVideo();
-                break;
-            }
+//            case R.id.menu_image_capture: {
+//                takePicture();
+//                break;
+//            }
+//            case R.id.menu_video_capture: {
+//                recordVideo();
+//                break;
+//            }
         }
         return true;
     }
