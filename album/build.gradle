@@ -20,13 +20,16 @@ android {
             withJavadocJar()
         }
     }
+
+    lintOptions {
+        disable 'RestrictedApi'
+    }
 }
 
 dependencies {
     implementation rootProject.ext.dependencies.appCompat
     implementation rootProject.ext.dependencies.design
-    implementation rootProject.ext.dependencies.recyclerView
-    implementation rootProject.ext.dependencies.cardView
+    implementation 'androidx.annotation:annotation:1.5.0'
     api rootProject.ext.dependencies.mediaScanner
 }
 

@@ -17,64 +17,64 @@ package com.yanzhenjie.album.mvp;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.StringRes;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.StringRes;
+import androidx.appcompat.widget.Toolbar;
 
 /**
  * Created by YanZhenjie on 2017/12/8.
  */
 abstract class Source<Host> {
 
-    private Host mHost;
+  private Host mHost;
 
-    public Source(Host host) {
-        mHost = host;
-    }
+  public Source(Host host) {
+    mHost = host;
+  }
 
-    public Host getHost() {
-        return mHost;
-    }
+  public Host getHost() {
+    return mHost;
+  }
 
-    abstract void prepare();
+  abstract void prepare();
 
-    abstract void setActionBar(Toolbar actionBar);
+  abstract void setActionBar(Toolbar actionBar);
 
-    abstract MenuInflater getMenuInflater();
+  abstract MenuInflater getMenuInflater();
 
-    abstract Menu getMenu();
+  abstract Menu getMenu();
 
-    abstract void setMenuClickListener(MenuClickListener selectedListener);
+  abstract void setMenuClickListener(MenuClickListener selectedListener);
 
-    abstract void setDisplayHomeAsUpEnabled(boolean showHome);
+  abstract void setDisplayHomeAsUpEnabled(boolean showHome);
 
-    abstract void setHomeAsUpIndicator(@DrawableRes int icon);
+  abstract void setHomeAsUpIndicator(@DrawableRes int icon);
 
-    abstract void setHomeAsUpIndicator(Drawable icon);
+  abstract void setHomeAsUpIndicator(Drawable icon);
 
-    abstract void setTitle(CharSequence title);
+  abstract void setTitle(CharSequence title);
 
-    abstract void setTitle(@StringRes int title);
+  abstract void setTitle(@StringRes int title);
 
-    abstract void setSubTitle(CharSequence title);
+  abstract void setSubTitle(CharSequence title);
 
-    abstract void setSubTitle(@StringRes int title);
+  abstract void setSubTitle(@StringRes int title);
 
-    abstract Context getContext();
+  abstract Context getContext();
 
-    abstract View getView();
+  abstract View getView();
 
-    abstract void closeInputMethod();
+  abstract void closeInputMethod();
 
-    interface MenuClickListener {
+  interface MenuClickListener {
 
-        void onHomeClick();
+    void onHomeClick();
 
-        void onMenuClick(MenuItem item);
-    }
+    void onMenuClick(MenuItem item);
+  }
 
 }

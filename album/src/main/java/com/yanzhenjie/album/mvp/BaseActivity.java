@@ -19,11 +19,11 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.PermissionChecker;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.PermissionChecker;
 import com.yanzhenjie.album.Album;
 import com.yanzhenjie.album.util.AlbumUtils;
 import java.util.ArrayList;
@@ -103,6 +103,7 @@ public class BaseActivity extends AppCompatActivity implements Bye {
 
   @Override
   public final void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     if (isGrantedResult(grantResults)) {
       onPermissionGranted(requestCode);
     } else {

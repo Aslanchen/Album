@@ -16,23 +16,11 @@
 package com.yanzhenjie.album.mvp;
 
 import android.app.Activity;
-import android.arch.lifecycle.GenericLifecycleObserver;
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleOwner;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.ArrayRes;
-import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.StringRes;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -40,7 +28,18 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import androidx.annotation.ArrayRes;
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.lifecycle.GenericLifecycleObserver;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
+import com.google.android.material.snackbar.Snackbar;
 import com.yanzhenjie.album.R;
 
 /**
@@ -49,334 +48,335 @@ import com.yanzhenjie.album.R;
  */
 public abstract class BaseView<Presenter extends BasePresenter> {
 
-    private Source mSource;
-    private Presenter mPresenter;
+  private Source mSource;
+  private Presenter mPresenter;
 
-    public BaseView(Activity activity, Presenter presenter) {
-        this(new ActivitySource(activity), presenter);
-    }
+  public BaseView(Activity activity, Presenter presenter) {
+    this(new ActivitySource(activity), presenter);
+  }
 
-    public BaseView(View view, Presenter presenter) {
-        this(new ViewSource(view), presenter);
-    }
+  public BaseView(View view, Presenter presenter) {
+    this(new ViewSource(view), presenter);
+  }
 
-    private BaseView(Source source, Presenter presenter) {
-        this.mSource = source;
-        this.mPresenter = presenter;
-        this.mSource.prepare();
+  private BaseView(Source source, Presenter presenter) {
+    this.mSource = source;
+    this.mPresenter = presenter;
+    this.mSource.prepare();
 
-        invalidateOptionsMenu();
-        mSource.setMenuClickListener(new Source.MenuClickListener() {
-            @Override
-            public void onHomeClick() {
-                getPresenter().bye();
-            }
+    invalidateOptionsMenu();
+    mSource.setMenuClickListener(new Source.MenuClickListener() {
+      @Override
+      public void onHomeClick() {
+        getPresenter().bye();
+      }
 
-            @Override
-            public void onMenuClick(MenuItem item) {
-                optionsItemSelected(item);
-            }
-        });
+      @Override
+      public void onMenuClick(MenuItem item) {
+        optionsItemSelected(item);
+      }
+    });
 
-        getPresenter().getLifecycle().addObserver(new GenericLifecycleObserver() {
-            @Override
-            public void onStateChanged(LifecycleOwner source, Lifecycle.Event event) {
-                if (event == Lifecycle.Event.ON_RESUME) {
-                    resume();
-                } else if (event == Lifecycle.Event.ON_PAUSE) {
-                    pause();
-                } else if (event == Lifecycle.Event.ON_STOP) {
-                    stop();
-                } else if (event == Lifecycle.Event.ON_DESTROY) {
-                    destroy();
-                }
-            }
-        });
-    }
-
-    public final Presenter getPresenter() {
-        return mPresenter;
-    }
-
-    private void resume() {
-        onResume();
-    }
-
-    protected void onResume() {
-    }
-
-    private void pause() {
-        onPause();
-    }
-
-    protected void onPause() {
-    }
-
-    private void stop() {
-        onStop();
-    }
-
-    protected void onStop() {
-    }
-
-    private void destroy() {
-        closeInputMethod();
-        onDestroy();
-    }
-
-    protected void onDestroy() {
-    }
-
-    /**
-     * Set actionBar.
-     */
-    protected final void setActionBar(Toolbar actionBar) {
-        mSource.setActionBar(actionBar);
-        invalidateOptionsMenu();
-    }
-
-    /**
-     * ReCreate menu.
-     */
-    protected final void invalidateOptionsMenu() {
-        Menu menu = mSource.getMenu();
-        if (menu != null) {
-            onCreateOptionsMenu(menu);
+    getPresenter().getLifecycle().addObserver(new GenericLifecycleObserver() {
+      @Override
+      public void onStateChanged(LifecycleOwner source, Lifecycle.Event event) {
+        if (event == Lifecycle.Event.ON_RESUME) {
+          resume();
+        } else if (event == Lifecycle.Event.ON_PAUSE) {
+          pause();
+        } else if (event == Lifecycle.Event.ON_STOP) {
+          stop();
+        } else if (event == Lifecycle.Event.ON_DESTROY) {
+          destroy();
         }
-    }
+      }
+    });
+  }
 
-    /**
-     * Get menu inflater.
-     */
-    protected final MenuInflater getMenuInflater() {
-        return mSource.getMenuInflater();
-    }
+  public final Presenter getPresenter() {
+    return mPresenter;
+  }
 
-    /**
-     * Create menu.
-     */
-    protected void onCreateOptionsMenu(Menu menu) {
-    }
+  private void resume() {
+    onResume();
+  }
 
-    private void optionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            if (!onInterceptToolbarBack()) {
-                getPresenter().bye();
-            }
-        } else {
-            onOptionsItemSelected(item);
-        }
-    }
+  protected void onResume() {
+  }
 
-    /**
-     * When the menu is clicked.
-     */
-    protected void onOptionsItemSelected(MenuItem item) {
-    }
+  private void pause() {
+    onPause();
+  }
 
-    /**
-     * Intercept the return button.
-     */
-    protected boolean onInterceptToolbarBack() {
-        return false;
-    }
+  protected void onPause() {
+  }
 
-    protected final void openInputMethod(View view) {
-        view.requestFocus();
-        InputMethodManager manager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (manager != null) {
-            manager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
-        }
-    }
+  private void stop() {
+    onStop();
+  }
 
-    protected final void closeInputMethod() {
-        mSource.closeInputMethod();
-    }
+  protected void onStop() {
+  }
 
-    protected final void setDisplayHomeAsUpEnabled(boolean showHome) {
-        mSource.setDisplayHomeAsUpEnabled(showHome);
-    }
+  private void destroy() {
+    closeInputMethod();
+    onDestroy();
+  }
 
-    protected final void setHomeAsUpIndicator(@DrawableRes int icon) {
-        mSource.setHomeAsUpIndicator(icon);
-    }
+  protected void onDestroy() {
+  }
 
-    protected final void setHomeAsUpIndicator(Drawable icon) {
-        mSource.setHomeAsUpIndicator(icon);
-    }
+  /**
+   * Set actionBar.
+   */
+  protected final void setActionBar(Toolbar actionBar) {
+    mSource.setActionBar(actionBar);
+    invalidateOptionsMenu();
+  }
 
-    public final void setTitle(String title) {
-        mSource.setTitle(title);
+  /**
+   * ReCreate menu.
+   */
+  protected final void invalidateOptionsMenu() {
+    Menu menu = mSource.getMenu();
+    if (menu != null) {
+      onCreateOptionsMenu(menu);
     }
+  }
 
-    public final void setTitle(@StringRes int title) {
-        mSource.setTitle(title);
-    }
+  /**
+   * Get menu inflater.
+   */
+  protected final MenuInflater getMenuInflater() {
+    return mSource.getMenuInflater();
+  }
 
-    public final void setSubTitle(String title) {
-        mSource.setSubTitle(title);
-    }
+  /**
+   * Create menu.
+   */
+  protected void onCreateOptionsMenu(Menu menu) {
+  }
 
-    public final void setSubTitle(@StringRes int title) {
-        mSource.setSubTitle(title);
+  private void optionsItemSelected(MenuItem item) {
+    if (item.getItemId() == android.R.id.home) {
+      if (!onInterceptToolbarBack()) {
+        getPresenter().bye();
+      }
+    } else {
+      onOptionsItemSelected(item);
     }
+  }
 
-    protected Context getContext() {
-        return mSource.getContext();
-    }
+  /**
+   * When the menu is clicked.
+   */
+  protected void onOptionsItemSelected(MenuItem item) {
+  }
 
-    protected Resources getResources() {
-        return getContext().getResources();
-    }
+  /**
+   * Intercept the return button.
+   */
+  protected boolean onInterceptToolbarBack() {
+    return false;
+  }
 
-    public final CharSequence getText(@StringRes int id) {
-        return getContext().getText(id);
+  protected final void openInputMethod(View view) {
+    view.requestFocus();
+    InputMethodManager manager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+    if (manager != null) {
+      manager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
     }
+  }
 
-    public final String getString(@StringRes int id) {
-        return getContext().getString(id);
-    }
+  protected final void closeInputMethod() {
+    mSource.closeInputMethod();
+  }
 
-    public final String getString(@StringRes int id, Object... formatArgs) {
-        return getContext().getString(id, formatArgs);
-    }
+  protected final void setDisplayHomeAsUpEnabled(boolean showHome) {
+    mSource.setDisplayHomeAsUpEnabled(showHome);
+  }
 
-    public final Drawable getDrawable(@DrawableRes int id) {
-        return ContextCompat.getDrawable(mSource.getContext(), id);
-    }
+  protected final void setHomeAsUpIndicator(@DrawableRes int icon) {
+    mSource.setHomeAsUpIndicator(icon);
+  }
 
-    @ColorInt
-    public final int getColor(@ColorRes int id) {
-        return ContextCompat.getColor(mSource.getContext(), id);
-    }
+  protected final void setHomeAsUpIndicator(Drawable icon) {
+    mSource.setHomeAsUpIndicator(icon);
+  }
 
-    public final String[] getStringArray(@ArrayRes int id) {
-        return getResources().getStringArray(id);
-    }
+  public final void setTitle(String title) {
+    mSource.setTitle(title);
+  }
 
-    public final int[] getIntArray(@ArrayRes int id) {
-        return getResources().getIntArray(id);
-    }
+  public final void setTitle(@StringRes int title) {
+    mSource.setTitle(title);
+  }
 
-    public void showMessageDialog(@StringRes int title, @StringRes int message) {
-        showMessageDialog(getText(title), getText(message));
-    }
+  public final void setSubTitle(String title) {
+    mSource.setSubTitle(title);
+  }
 
-    public void showMessageDialog(@StringRes int title, CharSequence message) {
-        showMessageDialog(getText(title), message);
-    }
+  public final void setSubTitle(@StringRes int title) {
+    mSource.setSubTitle(title);
+  }
 
-    public void showMessageDialog(CharSequence title, @StringRes int message) {
-        showMessageDialog(title, getText(message));
-    }
+  protected Context getContext() {
+    return mSource.getContext();
+  }
 
-    public void showMessageDialog(CharSequence title, CharSequence message) {
-        AlertDialog alertDialog = new AlertDialog.Builder(getContext())
-                .setTitle(title)
-                .setMessage(message)
-                .setPositiveButton(R.string.album_ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .create();
-        alertDialog.show();
-    }
+  protected Resources getResources() {
+    return getContext().getResources();
+  }
 
-    public void showConfirmDialog(@StringRes int title, @StringRes int message, OnDialogClickListener confirmClickListener) {
-        showConfirmDialog(getText(title), getText(message), confirmClickListener);
-    }
+  public final CharSequence getText(@StringRes int id) {
+    return getContext().getText(id);
+  }
 
-    public void showConfirmDialog(@StringRes int title, CharSequence message, OnDialogClickListener confirmClickListener) {
-        showConfirmDialog(getText(title), message, confirmClickListener);
-    }
+  public final String getString(@StringRes int id) {
+    return getContext().getString(id);
+  }
 
-    public void showConfirmDialog(CharSequence title, @StringRes int message, OnDialogClickListener confirmClickListener) {
-        showConfirmDialog(title, getText(message), confirmClickListener);
-    }
+  public final String getString(@StringRes int id, Object... formatArgs) {
+    return getContext().getString(id, formatArgs);
+  }
 
-    public void showConfirmDialog(CharSequence title, CharSequence message, final OnDialogClickListener confirmClickListener) {
-        AlertDialog alertDialog = new AlertDialog.Builder(getContext())
-                .setTitle(title)
-                .setMessage(message)
-                .setNegativeButton(R.string.album_cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .setPositiveButton(R.string.album_confirm, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        confirmClickListener.onClick(which);
-                    }
-                })
-                .create();
-        alertDialog.show();
-    }
+  public final Drawable getDrawable(@DrawableRes int id) {
+    return ContextCompat.getDrawable(mSource.getContext(), id);
+  }
 
-    public void showMessageDialog(@StringRes int title, @StringRes int message,
-                                  OnDialogClickListener cancelClickListener, OnDialogClickListener confirmClickListener) {
-        showMessageDialog(getText(title), getText(message), cancelClickListener, confirmClickListener);
-    }
+  @ColorInt
+  public final int getColor(@ColorRes int id) {
+    return ContextCompat.getColor(mSource.getContext(), id);
+  }
 
-    public void showMessageDialog(@StringRes int title, CharSequence message,
-                                  OnDialogClickListener cancelClickListener, OnDialogClickListener confirmClickListener) {
-        showMessageDialog(getText(title), message, cancelClickListener, confirmClickListener);
-    }
+  public final String[] getStringArray(@ArrayRes int id) {
+    return getResources().getStringArray(id);
+  }
 
-    public void showMessageDialog(CharSequence title, @StringRes int message,
-                                  OnDialogClickListener cancelClickListener, OnDialogClickListener confirmClickListener) {
-        showMessageDialog(title, getText(message), cancelClickListener, confirmClickListener);
-    }
+  public final int[] getIntArray(@ArrayRes int id) {
+    return getResources().getIntArray(id);
+  }
 
-    public void showMessageDialog(CharSequence title, CharSequence message,
-                                  final OnDialogClickListener cancelClickListener, final OnDialogClickListener confirmClickListener) {
-        AlertDialog alertDialog = new AlertDialog.Builder(getContext())
-                .setTitle(title)
-                .setMessage(message)
-                .setNegativeButton(R.string.album_cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        cancelClickListener.onClick(which);
-                    }
-                })
-                .setPositiveButton(R.string.album_confirm, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        confirmClickListener.onClick(which);
-                    }
-                })
-                .create();
-        alertDialog.show();
-    }
+  public void showMessageDialog(@StringRes int title, @StringRes int message) {
+    showMessageDialog(getText(title), getText(message));
+  }
 
-    public interface OnDialogClickListener {
-        void onClick(int which);
-    }
+  public void showMessageDialog(@StringRes int title, CharSequence message) {
+    showMessageDialog(getText(title), message);
+  }
 
-    public void toast(CharSequence message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
-    }
+  public void showMessageDialog(CharSequence title, @StringRes int message) {
+    showMessageDialog(title, getText(message));
+  }
 
-    public void toast(@StringRes int message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
-    }
+  public void showMessageDialog(CharSequence title, CharSequence message) {
+    AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+        .setTitle(title)
+        .setMessage(message)
+        .setPositiveButton(R.string.album_ok, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+          }
+        })
+        .create();
+    alertDialog.show();
+  }
 
-    public void snackBar(CharSequence message) {
-        Snackbar snackbar = Snackbar.make(mSource.getView(), message, Snackbar.LENGTH_SHORT);
-        View view = snackbar.getView();
-        view.setBackgroundColor(getColor(R.color.albumColorPrimaryBlack));
-        TextView textView = view.findViewById(android.support.design.R.id.snackbar_text);
-        textView.setTextColor(Color.WHITE);
-        snackbar.show();
-    }
+  public void showConfirmDialog(@StringRes int title, @StringRes int message, OnDialogClickListener confirmClickListener) {
+    showConfirmDialog(getText(title), getText(message), confirmClickListener);
+  }
 
-    public void snackBar(@StringRes int message) {
-        Snackbar snackbar = Snackbar.make(mSource.getView(), message, Snackbar.LENGTH_SHORT);
-        View view = snackbar.getView();
-        view.setBackgroundColor(getColor(R.color.albumColorPrimaryBlack));
-        TextView textView = view.findViewById(android.support.design.R.id.snackbar_text);
-        textView.setTextColor(Color.WHITE);
-        snackbar.show();
-    }
+  public void showConfirmDialog(@StringRes int title, CharSequence message, OnDialogClickListener confirmClickListener) {
+    showConfirmDialog(getText(title), message, confirmClickListener);
+  }
+
+  public void showConfirmDialog(CharSequence title, @StringRes int message, OnDialogClickListener confirmClickListener) {
+    showConfirmDialog(title, getText(message), confirmClickListener);
+  }
+
+  public void showConfirmDialog(CharSequence title, CharSequence message, final OnDialogClickListener confirmClickListener) {
+    AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+        .setTitle(title)
+        .setMessage(message)
+        .setNegativeButton(R.string.album_cancel, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+          }
+        })
+        .setPositiveButton(R.string.album_confirm, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            confirmClickListener.onClick(which);
+          }
+        })
+        .create();
+    alertDialog.show();
+  }
+
+  public void showMessageDialog(@StringRes int title, @StringRes int message,
+      OnDialogClickListener cancelClickListener, OnDialogClickListener confirmClickListener) {
+    showMessageDialog(getText(title), getText(message), cancelClickListener, confirmClickListener);
+  }
+
+  public void showMessageDialog(@StringRes int title, CharSequence message,
+      OnDialogClickListener cancelClickListener, OnDialogClickListener confirmClickListener) {
+    showMessageDialog(getText(title), message, cancelClickListener, confirmClickListener);
+  }
+
+  public void showMessageDialog(CharSequence title, @StringRes int message,
+      OnDialogClickListener cancelClickListener, OnDialogClickListener confirmClickListener) {
+    showMessageDialog(title, getText(message), cancelClickListener, confirmClickListener);
+  }
+
+  public void showMessageDialog(CharSequence title, CharSequence message,
+      final OnDialogClickListener cancelClickListener, final OnDialogClickListener confirmClickListener) {
+    AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+        .setTitle(title)
+        .setMessage(message)
+        .setNegativeButton(R.string.album_cancel, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            cancelClickListener.onClick(which);
+          }
+        })
+        .setPositiveButton(R.string.album_confirm, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            confirmClickListener.onClick(which);
+          }
+        })
+        .create();
+    alertDialog.show();
+  }
+
+  public interface OnDialogClickListener {
+
+    void onClick(int which);
+  }
+
+  public void toast(CharSequence message) {
+    Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+  }
+
+  public void toast(@StringRes int message) {
+    Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+  }
+
+  public void snackBar(CharSequence message) {
+    Snackbar snackbar = Snackbar.make(mSource.getView(), message, Snackbar.LENGTH_SHORT);
+    View view = snackbar.getView();
+    view.setBackgroundColor(getColor(R.color.albumColorPrimaryBlack));
+    TextView textView = view.findViewById(com.google.android.material.R.id.snackbar_text);
+    textView.setTextColor(Color.WHITE);
+    snackbar.show();
+  }
+
+  public void snackBar(@StringRes int message) {
+    Snackbar snackbar = Snackbar.make(mSource.getView(), message, Snackbar.LENGTH_SHORT);
+    View view = snackbar.getView();
+    view.setBackgroundColor(getColor(R.color.albumColorPrimaryBlack));
+    TextView textView = view.findViewById(com.google.android.material.R.id.snackbar_text);
+    textView.setTextColor(Color.WHITE);
+    snackbar.show();
+  }
 }

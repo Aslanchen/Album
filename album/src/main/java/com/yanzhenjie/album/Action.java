@@ -15,7 +15,8 @@
  */
 package com.yanzhenjie.album;
 
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 /**
  * <p>Any action takes place.</p>
@@ -23,11 +24,11 @@ import android.support.annotation.NonNull;
  */
 public interface Action<T> {
 
-    /**
-     * When the action responds.
-     *
-     * @param result the result of the action.
-     */
-    void onAction(@NonNull T result);
+  /**
+   * When the action responds.
+   *
+   * @param result the result of the action.
+   */
+  void onAction(@NonNull T result);
 
 }

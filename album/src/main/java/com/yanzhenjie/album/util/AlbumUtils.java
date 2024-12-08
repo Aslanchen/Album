@@ -27,21 +27,19 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.ColorInt;
-import android.support.annotation.IntRange;
-import android.support.annotation.NonNull;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.webkit.MimeTypeMap;
-
+import androidx.annotation.ColorInt;
+import androidx.annotation.IntRange;
+import androidx.annotation.NonNull;
+import androidx.core.graphics.drawable.DrawableCompat;
 import com.yanzhenjie.album.provider.CameraFileProvider;
 import com.yanzhenjie.album.widget.divider.Api20ItemDivider;
 import com.yanzhenjie.album.widget.divider.Api21ItemDivider;
 import com.yanzhenjie.album.widget.divider.Divider;
-
 import java.io.File;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
@@ -80,8 +78,9 @@ public class AlbumUtils {
     public static boolean sdCardIsAvailable() {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             return Environment.getExternalStorageDirectory().canWrite();
-        } else
+        } else {
             return false;
+        }
     }
 
     /**
@@ -131,9 +130,9 @@ public class AlbumUtils {
      * @param limitBytes  specify the maximum allowed size.
      */
     public static void takeVideo(@NonNull Activity activity, int requestCode, File outPath,
-                                 @IntRange(from = 0, to = 1) int quality,
-                                 @IntRange(from = 1) long duration,
-                                 @IntRange(from = 1) long limitBytes) {
+        @IntRange(from = 0, to = 1) int quality,
+        @IntRange(from = 1) long duration,
+        @IntRange(from = 1) long limitBytes) {
         Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         Uri uri = getUri(activity, outPath);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
@@ -167,7 +166,6 @@ public class AlbumUtils {
      * Generate a random jpg file path.
      *
      * @return file path.
-     *
      * @deprecated use {@link #randomJPGPath(Context)} instead.
      */
     @NonNull
@@ -181,12 +179,11 @@ public class AlbumUtils {
      * Generate a random jpg file path.
      *
      * @param context context.
-     *
      * @return file path.
      */
     @NonNull
     public static String randomJPGPath(Context context) {
-        if(!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+        if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             return randomJPGPath(context.getCacheDir());
         }
         return randomJPGPath();
@@ -207,7 +204,6 @@ public class AlbumUtils {
      * Generate a random mp4 file path.
      *
      * @return file path.
-     *
      * @deprecated use {@link #randomMP4Path(Context)} instead.
      */
     @NonNull
@@ -221,12 +217,11 @@ public class AlbumUtils {
      * Generate a random mp4 file path.
      *
      * @param context context.
-     *
      * @return file path.
      */
     @NonNull
     public static String randomMP4Path(Context context) {
-        if(!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+        if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             return randomMP4Path(context.getCacheDir());
         }
         return randomMP4Path();
@@ -251,8 +246,12 @@ public class AlbumUtils {
      */
     @NonNull
     private static String randomMediaPath(File bucket, String extension) {
-        if (bucket.exists() && bucket.isFile()) bucket.delete();
-        if (!bucket.exists()) bucket.mkdirs();
+        if (bucket.exists() && bucket.isFile()) {
+            bucket.delete();
+        }
+        if (!bucket.exists()) {
+            bucket.mkdirs();
+        }
         String outFilePath = AlbumUtils.getNowDateTime("yyyyMMdd_HHmmssSSS") + "_" + getMD5ForString(UUID.randomUUID().toString()) + extension;
         File file = new File(bucket, outFilePath);
         return file.getAbsolutePath();
@@ -278,7 +277,9 @@ public class AlbumUtils {
      */
     public static String getMimeType(String url) {
         String extension = getExtension(url);
-        if (!MimeTypeMap.getSingleton().hasExtension(extension)) return "";
+        if (!MimeTypeMap.getSingleton().hasExtension(extension)) {
+            return "";
+        }
 
         String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
         return TextUtils.isEmpty(mimeType) ? "" : mimeType;

@@ -17,17 +17,16 @@ package com.yanzhenjie.album.mvp;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.StringRes;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.view.SupportMenuInflater;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-
+import androidx.annotation.DrawableRes;
+import androidx.annotation.StringRes;
+import androidx.appcompat.view.SupportMenuInflater;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import com.yanzhenjie.album.R;
 
 /**
@@ -35,126 +34,131 @@ import com.yanzhenjie.album.R;
  */
 class ViewSource extends Source<View> {
 
-    private Toolbar mActionBar;
-    private Drawable mActionBarIcon;
-    private MenuClickListener mMenuItemSelectedListener;
+  private Toolbar mActionBar;
+  private Drawable mActionBarIcon;
+  private MenuClickListener mMenuItemSelectedListener;
 
-    ViewSource(View view) {
-        super(view);
-    }
+  ViewSource(View view) {
+    super(view);
+  }
 
-    @Override
-    void prepare() {
-        Toolbar toolbar = getHost().findViewById(R.id.toolbar);
-        setActionBar(toolbar);
-    }
+  @Override
+  void prepare() {
+    Toolbar toolbar = getHost().findViewById(R.id.toolbar);
+    setActionBar(toolbar);
+  }
 
-    @Override
-    void setActionBar(Toolbar actionBar) {
-        this.mActionBar = actionBar;
+  @Override
+  void setActionBar(Toolbar actionBar) {
+    this.mActionBar = actionBar;
 
-        if (mActionBar != null) {
-            mActionBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    if (mMenuItemSelectedListener != null) {
-                        mMenuItemSelectedListener.onMenuClick(item);
-                    }
-                    return true;
-                }
-            });
-            mActionBar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mMenuItemSelectedListener != null) {
-                        mMenuItemSelectedListener.onHomeClick();
-                    }
-                }
-            });
-            mActionBarIcon = mActionBar.getNavigationIcon();
+    if (mActionBar != null) {
+      mActionBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+          if (mMenuItemSelectedListener != null) {
+            mMenuItemSelectedListener.onMenuClick(item);
+          }
+          return true;
         }
-    }
-
-    @Override
-    MenuInflater getMenuInflater() {
-        return new SupportMenuInflater(getContext());
-    }
-
-    @Override
-    Menu getMenu() {
-        return mActionBar == null ? null : mActionBar.getMenu();
-    }
-
-    @Override
-    void setMenuClickListener(MenuClickListener selectedListener) {
-        this.mMenuItemSelectedListener = selectedListener;
-    }
-
-    @Override
-    void setDisplayHomeAsUpEnabled(boolean showHome) {
-        if (mActionBar != null) {
-            if (showHome) {
-                mActionBar.setNavigationIcon(mActionBarIcon);
-            } else {
-                mActionBar.setNavigationIcon(null);
-            }
+      });
+      mActionBar.setNavigationOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          if (mMenuItemSelectedListener != null) {
+            mMenuItemSelectedListener.onHomeClick();
+          }
         }
+      });
+      mActionBarIcon = mActionBar.getNavigationIcon();
     }
+  }
 
-    @Override
-    void setHomeAsUpIndicator(@DrawableRes int icon) {
-        setHomeAsUpIndicator(ContextCompat.getDrawable(getContext(), icon));
-    }
+  @Override
+  MenuInflater getMenuInflater() {
+    return new SupportMenuInflater(getContext());
+  }
 
-    @Override
-    void setHomeAsUpIndicator(Drawable icon) {
-        this.mActionBarIcon = icon;
-        if (mActionBar != null)
-            mActionBar.setNavigationIcon(icon);
-    }
+  @Override
+  Menu getMenu() {
+    return mActionBar == null ? null : mActionBar.getMenu();
+  }
 
-    @Override
-    final void setTitle(CharSequence title) {
-        if (mActionBar != null)
-            mActionBar.setTitle(title);
-    }
+  @Override
+  void setMenuClickListener(MenuClickListener selectedListener) {
+    this.mMenuItemSelectedListener = selectedListener;
+  }
 
-    @Override
-    final void setTitle(@StringRes int title) {
-        if (mActionBar != null)
-            mActionBar.setTitle(title);
+  @Override
+  void setDisplayHomeAsUpEnabled(boolean showHome) {
+    if (mActionBar != null) {
+      if (showHome) {
+        mActionBar.setNavigationIcon(mActionBarIcon);
+      } else {
+        mActionBar.setNavigationIcon(null);
+      }
     }
+  }
 
-    @Override
-    final void setSubTitle(CharSequence title) {
-        if (mActionBar != null)
-            mActionBar.setSubtitle(title);
-    }
+  @Override
+  void setHomeAsUpIndicator(@DrawableRes int icon) {
+    setHomeAsUpIndicator(ContextCompat.getDrawable(getContext(), icon));
+  }
 
-    @Override
-    final void setSubTitle(@StringRes int title) {
-        if (mActionBar != null)
-            mActionBar.setSubtitle(title);
+  @Override
+  void setHomeAsUpIndicator(Drawable icon) {
+    this.mActionBarIcon = icon;
+    if (mActionBar != null) {
+      mActionBar.setNavigationIcon(icon);
     }
+  }
 
-    @Override
-    Context getContext() {
-        return getHost().getContext();
+  @Override
+  final void setTitle(CharSequence title) {
+    if (mActionBar != null) {
+      mActionBar.setTitle(title);
     }
+  }
 
-    @Override
-    View getView() {
-        return getHost();
+  @Override
+  final void setTitle(@StringRes int title) {
+    if (mActionBar != null) {
+      mActionBar.setTitle(title);
     }
+  }
 
-    @Override
-    void closeInputMethod() {
-        View focusView = getView().findFocus();
-        if (focusView != null) {
-            InputMethodManager manager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (manager != null) {
-                manager.hideSoftInputFromWindow(focusView.getWindowToken(), 0);
-            }
-        }
+  @Override
+  final void setSubTitle(CharSequence title) {
+    if (mActionBar != null) {
+      mActionBar.setSubtitle(title);
     }
+  }
+
+  @Override
+  final void setSubTitle(@StringRes int title) {
+    if (mActionBar != null) {
+      mActionBar.setSubtitle(title);
+    }
+  }
+
+  @Override
+  Context getContext() {
+    return getHost().getContext();
+  }
+
+  @Override
+  View getView() {
+    return getHost();
+  }
+
+  @Override
+  void closeInputMethod() {
+    View focusView = getView().findFocus();
+    if (focusView != null) {
+      InputMethodManager manager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+      if (manager != null) {
+        manager.hideSoftInputFromWindow(focusView.getWindowToken(), 0);
+      }
+    }
+  }
 }
