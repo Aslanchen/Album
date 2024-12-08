@@ -86,6 +86,8 @@ public class CameraActivity extends BaseActivity {
           }
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             requestPermission(PERMISSION_TAKE_PICTURE_33, CODE_PERMISSION_IMAGE);
+          } else if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+            requestPermission(PERMISSION_TAKE_PICTURE_30, CODE_PERMISSION_IMAGE);
           } else {
             requestPermission(PERMISSION_TAKE_PICTURE, CODE_PERMISSION_IMAGE);
           }
@@ -97,6 +99,8 @@ public class CameraActivity extends BaseActivity {
           }
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             requestPermission(PERMISSION_TAKE_VIDEO_33, CODE_PERMISSION_VIDEO);
+          } else if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+            requestPermission(PERMISSION_TAKE_VIDEO_30, CODE_PERMISSION_VIDEO);
           } else {
             requestPermission(PERMISSION_TAKE_VIDEO, CODE_PERMISSION_VIDEO);
           }

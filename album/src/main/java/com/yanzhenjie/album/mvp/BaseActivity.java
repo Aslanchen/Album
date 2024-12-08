@@ -40,6 +40,10 @@ public class BaseActivity extends AppCompatActivity implements Bye {
       android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
       android.Manifest.permission.READ_EXTERNAL_STORAGE
   };
+  public static final String[] PERMISSION_TAKE_PICTURE_30 = {
+      android.Manifest.permission.CAMERA,
+      android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+  };
   public static final String[] PERMISSION_TAKE_PICTURE_33 = {
       android.Manifest.permission.CAMERA,
       android.Manifest.permission.READ_MEDIA_IMAGES
@@ -48,6 +52,10 @@ public class BaseActivity extends AppCompatActivity implements Bye {
   public static final String[] PERMISSION_TAKE_VIDEO = {
       android.Manifest.permission.CAMERA, android.Manifest.permission.RECORD_AUDIO,
       android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+      android.Manifest.permission.READ_EXTERNAL_STORAGE
+  };
+  public static final String[] PERMISSION_TAKE_VIDEO_30 = {
+      android.Manifest.permission.CAMERA, android.Manifest.permission.RECORD_AUDIO,
       android.Manifest.permission.READ_EXTERNAL_STORAGE
   };
   public static final String[] PERMISSION_TAKE_VIDEO_33 = {
@@ -59,6 +67,9 @@ public class BaseActivity extends AppCompatActivity implements Bye {
   public static final String[] PERMISSION_STORAGE = {
       android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
       android.Manifest.permission.READ_EXTERNAL_STORAGE
+  };
+  public static final String[] PERMISSION_STORAGE_30 = {
+      android.Manifest.permission.READ_EXTERNAL_STORAGE,
   };
   public static final String[] PERMISSION_STORAGE_33 = {
       android.Manifest.permission.READ_MEDIA_IMAGES,
